@@ -147,13 +147,7 @@ public class VideoServiceImpl implements VideoService {
                 videoInfoDto.setCover(visionVideoDetailPhoto.getString("coverUrl"));
                 videoInfoDto.setTime(visionVideoDetailPhoto.getString("timestamp"));
             }
-            if (matcherUrl.find()) {
-                String code = UnicodeUtil.toString(matcherUrl.group(0));
-                String videoUrl = code.split("\"")[3];
-                System.out.println(videoUrl);
-                log.info("视频解析成功: {}", videoUrl.equals(videoInfoDto.getUrl()));
-                videoInfoDto.setUrl(videoUrl);
-            }
+
 
         }
         if (videoInfoDto == null) {

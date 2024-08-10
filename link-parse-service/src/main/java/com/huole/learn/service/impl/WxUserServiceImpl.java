@@ -3,6 +3,7 @@ package com.huole.learn.service.impl;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.huole.learn.config.WxConfig;
+import com.huole.learn.entity.ResultModel;
 import com.huole.learn.entity.WxUser;
 import com.huole.learn.entity.WxUserDO;
 import com.huole.learn.entity.WxUserParam;
@@ -60,10 +61,11 @@ public class WxUserServiceImpl implements WxUserService {
     }
 
     @Override
-    public WxUser singIn(String openId) {
+    public ResultModel<WxUser> singIn(String openId) {
         WxUser wxUser = getUserInfoByOpenId(openId);
         if (wxUser == null) {
             log.error("用户不存在");
+            return ResultModel.fail("用户不存在");
         }
         Date signTime = wxUser.getEndSignInTime();//最后签到时间
         Date nowDate = new Date();
@@ -78,8 +80,9 @@ public class WxUserServiceImpl implements WxUserService {
             wxUserMapper.updateByPrimaryKey(userDO);
         } else {
             log.error("重复签到");
+            return ResultModel.fail("重复签到");
         }
-        return wxUser;
+        return ResultModel.success(wxUser);
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.huole.learn.service;
 
+import com.huole.learn.entity.ResultModel;
 import com.huole.learn.entity.WxUser;
 
 /**
@@ -38,7 +39,7 @@ public interface WxUserService {
      * @param openId
      * @return 累计签到次数
      */
-    WxUser singIn(String openId);
+    ResultModel<WxUser> singIn(String openId);
 
     /***
      * 获取微信用户openId

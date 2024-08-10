@@ -57,7 +57,6 @@ public class WxUserController {
      */
     @PostMapping(value = "signIn")
     public ResultModel<WxUser> sign(@RequestParam(value = "openId") String openId) {
-        WxUser wxUser = wxUserService.singIn(openId);
-        return ResultModel.success(wxUser);
+        return wxUserService.singIn(openId);
     }
 }

@@ -49,4 +49,8 @@ public class ResultModel<T> {
     public static <T> ResultModel<T> success(@Nullable T data) {
         return new ResultModel<>(HttpStatus.OK.value(), HttpStatus.OK.getReasonPhrase(), data);
     }
+
+    public static <T> ResultModel<T> fail(@Nullable String msg) {
+        return new ResultModel<>(HttpStatus.EXPECTATION_FAILED.value(), msg, null);
+    }
 }
