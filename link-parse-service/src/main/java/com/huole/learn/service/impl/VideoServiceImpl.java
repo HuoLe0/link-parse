@@ -1,6 +1,5 @@
 package com.huole.learn.service.impl;
 
-import cn.hutool.core.text.UnicodeUtil;
 import cn.hutool.http.HttpUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
@@ -8,24 +7,18 @@ import com.alibaba.fastjson.JSONObject;
 import com.huole.learn.entity.ParsingInfoDO;
 import com.huole.learn.entity.WxUser;
 import com.huole.learn.entity.dto.VideoInfoDto;
+import com.huole.learn.factory.LinkParseFactory;
 import com.huole.learn.mapper.ParsingInfoMapper;
 import com.huole.learn.service.VideoService;
 import com.huole.learn.service.WxUserService;
 import com.huole.learn.utils.HttpClientUtil;
 import com.huole.learn.utils.RestTemplateUtil;
 import lombok.extern.slf4j.Slf4j;
-import org.htmlunit.UnexpectedPage;
-import org.htmlunit.WebClient;
-import org.htmlunit.html.HtmlPage;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.select.Elements;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import javax.annotation.Resource;
-import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -41,6 +34,9 @@ import java.util.regex.Pattern;
 public class VideoServiceImpl implements VideoService {
 
     private static final String PEARKTRUE_URL = "https://api.pearktrue.cn/api/video/douyin/?url=%s";
+
+    @Resource
+    private LinkParseFactory linkParseFactory;
 
     @Resource(name = "wxUserService")
     private WxUserService wxUserService;
@@ -68,15 +64,8 @@ public class VideoServiceImpl implements VideoService {
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.set("User-Agent", "Mozilla/5.0 (Linux; Android 5.0; SM-G900P Build/LRX21T) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.212 Mobile Safari/537.36");
         httpHeaders.set("Referer", url);
-        VideoInfoDto videoInfoDto;
-        //抖音快手Java解析其余短视频平台Java版本暂时没时间写先用php
-        if (url.contains("douyin")) {
-            videoInfoDto = parsingDyVideoInfo(url, httpHeaders);
-        } else if (url.contains("kuaishou")) {
-            videoInfoDto = parsingKsuVideoInfo(url, httpHeaders);
-        } else {
-            videoInfoDto = phpParsingVideoInfo(url);
-        }
+        VideoInfoDto videoInfoDto = linkParseFactory.getMediaApi(url).parse(url);
+
         wxUser.setVideoNumber(wxUser.getVideoNumber() - 1);
         wxUser.setLastParsingTime(new Date());
         wxUserService.updateById(wxUser);

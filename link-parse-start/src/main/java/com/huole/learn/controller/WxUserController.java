@@ -4,10 +4,7 @@ import com.huole.learn.entity.ResultModel;
 import com.huole.learn.entity.WxUser;
 import com.huole.learn.service.WxUserService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.Date;
@@ -16,6 +13,7 @@ import java.util.Date;
  * @author hanning.hn
  * @date 2024/8/3
  */
+@CrossOrigin
 @RestController
 @RequestMapping("/api/wx")
 @Slf4j
